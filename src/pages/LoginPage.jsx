@@ -4,12 +4,16 @@ import Button from "../components/Button"
 import Input from "../components/Input"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
-import { useState } from "react"
+import { useContext, useState } from "react"
+import UserContext from "../contexts/UserContext"
+import AuthContext from "../contexts/AuthContext"
 
-export default function LoginPage({ setToken }) {
+export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
+  const [user, setUser] = useContext(UserContext)
+  const { setToken } = useContext(AuthContext)
 
   function sendLogin(e) {
     e.preventDefault()
@@ -18,6 +22,7 @@ export default function LoginPage({ setToken }) {
 
     axios.post(URL, body)
       .then(res => {
+        setUser(res.data)
         setToken(res.data.token)
         localStorage.setItem("token", res.data.token)
         navigate("/market")

@@ -3,13 +3,15 @@ import FloatingCartButton from "../components/FloatingCartButton"
 import Location from "../components/Location"
 import Item from "../components/Item"
 import TopBar from "../components/TopBar"
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import AuthContext from "../contexts/AuthContext"
 
-export default function MarketPage({ token }) {
+export default function MarketPage() {
   const [products, setProducts] = useState(null)
   const navigate = useNavigate()
+  const { token } = useContext(AuthContext)
 
   useEffect(() => {
     if (!token) {
