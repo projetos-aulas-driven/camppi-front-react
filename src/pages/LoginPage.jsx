@@ -2,22 +2,45 @@ import styled from "styled-components"
 import BigLogo from "../components/BigLogo"
 import Button from "../components/Button"
 import Input from "../components/Input"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import axios from "axios"
+import { useState } from "react"
 
-export default function LoginPage() {
+export default function LoginPage({ setToken }) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
+  function sendLogin(e) {
+    e.preventDefault()
+    const URL = "https://mock-api.driven.com.br/api/v2/camppi/auth/login"
+    const body = { email, password }
+
+    axios.post(URL, body)
+      .then(res => {
+        setToken(res.data.token)
+        navigate("/market")
+      })
+      .catch(err => console.log(err.response.data))
+  }
+
   return (
     <Container>
       <BigLogo />
-      <form>
+      <form onSubmit={sendLogin}>
         <Input
           type="email"
           placeholder="E-mail"
           required
+          value={email}
+          onChange={e => setEmail(e.target.value)}
         />
         <Input
           type="password"
           placeholder="Senha"
           required
+          value={password}
+          onChange={e => setPassword(e.target.value)}
         />
         <Button type="submit">Entrar</Button>
       </form>

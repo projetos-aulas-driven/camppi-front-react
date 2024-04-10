@@ -3,34 +3,58 @@ import styled from "styled-components"
 import BigLogo from "../components/BigLogo"
 import Button from "../components/Button"
 import Input from "../components/Input"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import axios from "axios"
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const [city, setCity] = useState("BH")
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [image, setImage] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
+  function createAccount(e) {
+    e.preventDefault()
+    const URL = "https://mock-api.driven.com.br/api/v2/camppi/auth/sign-up"
+    const body = { name, email, image, password, city }
+
+    axios.post(URL, body)
+      .then(() => navigate("/"))
+      .catch(err => console.log(err.response.data))
+  }
 
   return (
     <Container>
       <BigLogo />
-      <form>
+      <form onSubmit={createAccount}>
         <Input
           type="text"
           placeholder="Nome"
           required
+          value={name}
+          onChange={e => setName(e.target.value)}
         />
         <Input
           type="email"
           placeholder="E-mail"
           required
+          value={email}
+          onChange={e => setEmail(e.target.value)}
         />
         <Input
           type="url"
           placeholder="Imagem"
           required
+          value={image}
+          onChange={e => setImage(e.target.value)}
         />
         <Input
           type="password"
           placeholder="Senha"
           required
+          value={password}
+          onChange={e => setPassword(e.target.value)}
         />
         <Grid>
           <Button type="button" isActive={city === 'BH'} onClick={() => setCity("BH")}>BH</Button>

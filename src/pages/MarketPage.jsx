@@ -3,22 +3,42 @@ import FloatingCartButton from "../components/FloatingCartButton"
 import Location from "../components/Location"
 import Item from "../components/Item"
 import TopBar from "../components/TopBar"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
-export default function MarketPage() {
+export default function MarketPage({ token }) {
+  const [products, setProducts] = useState(null)
+
+  useEffect(() => {
+    const URL = "https://mock-api.driven.com.br/api/v2/camppi/items"
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }
+
+    axios.get(URL, config)
+      .then(res => setProducts(res.data))
+      .catch(err => console.log(err.response.data))
+  }, [])
+
+  if (products === null) {
+    return <div>Carregando...</div>
+  }
+
   return (
     <Container>
       <TopBar />
       <Location />
-      <Item
-        title={"Pão de queijo"}
-        description={"Isso é tudo que eu desejo"}
-        image={"https://vovopalmirinha.com.br/wp-content/uploads/2019/06/pao-de-queijo-702x336.jpg"}
-        price={20} />
-      <Item
-        title={"Pão de queijo"}
-        description={"Isso é tudo que eu desejo"}
-        image={"https://vovopalmirinha.com.br/wp-content/uploads/2019/06/pao-de-queijo-702x336.jpg"}
-        price={20} />
+      {products.map(prod => (
+        <Item
+          key={prod.id}
+          title={prod.name}
+          description={prod.description}
+          image={prod.image}
+          price={prod.price} />
+      ))}
       <FloatingCartButton />
     </Container>
   )
