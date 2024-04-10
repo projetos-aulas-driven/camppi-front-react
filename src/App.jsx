@@ -5,7 +5,7 @@ import SignUpPage from "./pages/SignUpPage"
 import { useState } from "react"
 
 function App() {
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState(localStorage.getItem("token"))
 
   return (
     <BrowserRouter>

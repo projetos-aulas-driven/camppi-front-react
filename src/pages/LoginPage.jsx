@@ -19,6 +19,7 @@ export default function LoginPage({ setToken }) {
     axios.post(URL, body)
       .then(res => {
         setToken(res.data.token)
+        localStorage.setItem("token", res.data.token)
         navigate("/market")
       })
       .catch(err => console.log(err.response.data))

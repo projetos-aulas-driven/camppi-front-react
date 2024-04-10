@@ -5,9 +5,17 @@ import Item from "../components/Item"
 import TopBar from "../components/TopBar"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
 export default function MarketPage({ token }) {
   const [products, setProducts] = useState(null)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/")
+    }
+  }, [])
 
   useEffect(() => {
     const URL = "https://mock-api.driven.com.br/api/v2/camppi/items"
